@@ -17,4 +17,4 @@ An Event Collaboration app for to make your day easier
 ### Credits
 - [Shadman Saleh](https://github.com/shadmansaleh) ([shadmansaleh3@gmail.com](mailto://shadmansaleh3@gmail.com))
 - [Esnat Jahan Ena](https://github.com/EsnatJahan) ([esnatjahan@gmail.com](mailto://esnatjahan@gmail.com))
-- [Arupa Barua](https://github.com/) ([](mailto://))
+- [Arupa Barua](https://github.com/ArupaBarua) ([arupab362@gmail.com](mailto://arupab362@gmail.com))
