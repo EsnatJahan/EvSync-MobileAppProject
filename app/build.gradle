@@ -46,7 +46,10 @@ dependencies {
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.lifecycle.viewmodel.ktx
 
+    implementation "androidx.fragment:fragment-ktx:1.6.0"  // This is for Fragment KTX extensions
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0"
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

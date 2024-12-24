@@ -12,9 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+private var splashDone = false
 class MainActivity : AppCompatActivity() {
-    private var splashDone = false
-    val splashDelay: Long = 1000  // jump to app screen after 1000ms
+    private val splashDelay: Long = 1000  // jump to app screen after 1000ms
+    private val splash = SplashFragment()
+    private val app = AppFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,17 +29,20 @@ class MainActivity : AppCompatActivity() {
 
         if (!splashDone) {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fl_root, splashFragment)
+                replace(R.id.fl_root, splash)
                 commit()
             }
             lifecycleScope.launch(Dispatchers.Main) {
                 delay(splashDelay)
                 splashDone = true
-                extracted()
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.fl_root, app)
+                    commit()
+                }
             }
         } else {
             supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fl_root, AppFragment())
+                replace(R.id.fl_root, app)
                 commit()
             }
         }
@@ -48,10 +54,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun extracted() {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fl_root, AppFragment())
-            commit()
-        }
-    }
 }
