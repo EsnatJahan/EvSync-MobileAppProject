@@ -1,12 +1,11 @@
 package com.esa.evsync
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.esa.evsync.ui.auth.ui.login.LoginFragment
+import com.esa.evsync.app.SplashFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,10 +13,10 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContentView(R.layout.activity_main)
-        val loginFragment = LoginFragment()
+        val splashFragment = SplashFragment()
 
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fl_root, loginFragment)
+            replace(R.id.fl_root, splashFragment)
             commit()
         }
 
