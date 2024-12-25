@@ -13,6 +13,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.esa.evsync.databinding.ActivityLoginBinding
 
 
@@ -32,17 +33,19 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlin.collections.hashMapOf
 
 class LoginActivity : AppCompatActivity() {
     private val splashDelay: Long = 1000
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private val db = Firebase.firestore
     private lateinit var binding: ActivityLoginBinding
 
 //    private lateinit var credentialsClient: CredentialsClient
@@ -98,7 +101,21 @@ class LoginActivity : AppCompatActivity() {
             val user = auth.currentUser
             val isNewUser = res.additionalUserInfo?.isNewUser ?: false
             if (isNewUser) {
-                Firebase.auth.currentUser!!.linkWithCredential(firebaseCredential).await()
+//                Firebase.auth.currentUser!!.linkWithCredential(firebaseCredential).await()
+                val user = hashMapOf(
+                    "username" to user?.displayName,
+                    "email" to user?.email,
+                    "phone" to user?.phoneNumber,
+                    "profile_picture" to user?.photoUrl,
+                    "provider" to user?.providerId,
+                    "uid" to user?.uid,
+                    "isEmailVerified" to user?.isEmailVerified
+                )
+                try {
+                    val ref = db.collection("users").add(user).await()
+                } catch (e:Error) {
+                    Log.e("firebase", "failed to insert data", e)
+                }
             }
             Log.d("GoogleSignIn", "Sign-In successful: ${user?.email}")
             startActivity(Intent(this, AppActivity::class.java))
