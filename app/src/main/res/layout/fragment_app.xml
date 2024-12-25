@@ -14,47 +14,59 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/nav_height" />
 
-    <FrameLayout
-        android:id="@+id/fl_appBody"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/appBody"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_bot_graph"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/gl_app_bot_split"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/fl_appNav"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_nav"
+        app:layout_constraintTop_toBottomOf="@id/gl_app_bot_split"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/gl_app_bot_split">
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/fl_appNav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/gl_app_bot_split">-->
 
-        <Button
-            android:id="@+id/btnNavTasks"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Tasks" />
+<!--        <Button-->
+<!--            android:id="@+id/btnNavTasks"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Tasks" />-->
 
-        <Button
-            android:id="@+id/btnNavEvents"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Events" />
+<!--        <Button-->
+<!--            android:id="@+id/btnNavEvents"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Events" />-->
 
-        <Button
-            android:id="@+id/btnNavSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Settings" />
+<!--        <Button-->
+<!--            android:id="@+id/btnNavSettings"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="Settings" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

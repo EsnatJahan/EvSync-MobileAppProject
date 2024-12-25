@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-private var splashDone = false
+private var splashDone = true
 class MainActivity : AppCompatActivity() {
     private val splashDelay: Long = 1000  // jump to app screen after 1000ms
     private val splash = SplashFragment()
@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
 
         setContentView(R.layout.activity_main)
-        val splashFragment = SplashFragment()
 
         if (!splashDone) {
             supportFragmentManager.beginTransaction().apply {

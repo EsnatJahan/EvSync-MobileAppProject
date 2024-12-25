@@ -1,0 +1,18 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tasksFragment">
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.esa.evsync.app.pages.TasksFragment"
+        android:label="Tasks" />
+    <fragment
+        android:id="@+id/eventsFragment"
+        android:name="com.esa.evsync.app.pages.EventsFragment"
+        android:label="Events" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.esa.evsync.app.pages.SettingsFragment"
+        android:label="Settings" />
+</navigation>
