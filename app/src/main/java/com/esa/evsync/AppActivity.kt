@@ -1,6 +1,7 @@
 package com.esa.evsync
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -40,7 +41,24 @@ class AppActivity : AppCompatActivity() {
 //            botNavDestListener(navController, dest, bundle)
 //        }
 
-
+//         Handle the Bottom Navigation item clicks
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_events -> {
+                    navController.navigate(R.id.nav_events)
+                    true
+                }
+                R.id.nav_tasks -> {
+                    navController.navigate(R.id.nav_tasks)
+                    true
+                }
+                R.id.nav_settings -> {
+                    navController.navigate(R.id.nav_settings)
+                    true
+                }
+                else -> false
+            }
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.app)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -49,11 +67,23 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    private fun botNavDestListener (navController: NavController, destination: NavDestination, bundle: Bundle?) {
-//        when (destination.id) {
-//            in NavMap.destinationToNavItemMap -> binding.bottomNavigation.selectedItemId = NavMap.destinationToNavItemMap[destination.id]!!
-//            else -> binding.bottomNavigation.selectedItemId = destination.id
+//    private var suppressNavListener = false
+//    private fun botNavDestListener (navController: NavController, destination: NavDestination, bundle: Bundle?) {
+//
+//        if (!suppressNavListener
+//            && destination.id in NavMap.destinationToNavItemMap
+//            && binding.bottomNav.selectedItemId != destination.id
+//            && binding.bottomNav.selectedItemId != NavMap.destinationToNavItemMap[destination.id]) {
+//            Log.d("nav transition", """"
+//                    | destination: ${destination.id}
+//                    | mapped: ${NavMap.destinationToNavItemMap[destination.id]}
+//                    | selected: ${binding.bottomNav.selectedItemId}
+//                """.trimIndent())
+//            suppressNavListener = true
+//            binding.bottomNav.selectedItemId = NavMap.destinationToNavItemMap[destination.id]!!
+//            suppressNavListener = false
+//            Log.d("nav transition", "set now: ${binding.bottomNav.selectedItemId}")
 //        }
-    }
+//    }
 
 }
