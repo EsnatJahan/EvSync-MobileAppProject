@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import com.esa.evsync.R
 
 
-class EventsFragment : Fragment() {
+class EventAddFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_events, container, false)
+        return inflater.inflate(R.layout.fragment_event_add, container, false)
     }
 }

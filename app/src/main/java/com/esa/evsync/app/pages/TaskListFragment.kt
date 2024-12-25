@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import com.esa.evsync.R
 
 
-class TasksFragment : Fragment() {
+class TaskListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_tasks, container, false)
+        return inflater.inflate(R.layout.fragment_task_list, container, false)
     }
 }

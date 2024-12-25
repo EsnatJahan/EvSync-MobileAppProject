@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/tasksFragment"
+        android:id="@+id/nav_tasks"
         android:title="Tasks"
         android:icon="@drawable/ic_tasks" />
     <item
-        android:id="@+id/eventsFragment"
+        android:id="@+id/nav_events"
         android:title="Events"
         android:icon="@drawable/baseline_event_black_24dp" />
     <item
-        android:id="@+id/settingsFragment"
+        android:id="@+id/nav_settings"
         android:title="Settings"
         android:icon="@drawable/baseline_settings_black_24dp" />
 </menu>
