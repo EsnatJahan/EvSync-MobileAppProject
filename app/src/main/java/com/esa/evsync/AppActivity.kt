@@ -1,5 +1,6 @@
 package com.esa.evsync
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.esa.evsync.app.models.AppViewModel
 import com.esa.evsync.app.nav.NavMap
 import com.esa.evsync.databinding.ActivityAppBinding
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AppActivity : AppCompatActivity() {
@@ -26,6 +28,15 @@ class AppActivity : AppCompatActivity() {
         savedInstanceState: Bundle?
     ) {
         super.onCreate(savedInstanceState)
+
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            // Redirect to LoginActivity if not logged in
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         enableEdgeToEdge()
         binding = ActivityAppBinding.inflate(layoutInflater)
         setContentView(binding.root)
