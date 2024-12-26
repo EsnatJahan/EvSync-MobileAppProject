@@ -106,10 +106,7 @@ class LoginActivity : AppCompatActivity() {
                     "username" to user?.displayName,
                     "email" to user?.email,
                     "phone" to user?.phoneNumber,
-                    "profile_picture" to user?.photoUrl,
-                    "provider" to user?.providerId,
-                    "uid" to user?.uid,
-                    "isEmailVerified" to user?.isEmailVerified
+                    "profile_picture" to user?.photoUrl
                 )
                 try {
                     val ref = db.collection("users").add(user).await()
