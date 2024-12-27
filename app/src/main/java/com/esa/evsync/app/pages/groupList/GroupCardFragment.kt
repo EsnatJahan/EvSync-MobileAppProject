@@ -18,8 +18,10 @@ import com.esa.evsync.app.dataModels.GroupModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 /**
  * A fragment representing a list of Items.
@@ -50,15 +52,18 @@ class GroupCardFragment : Fragment() {
             navController.navigate(R.id.action_eventsFragment_to_eventAddFragment)
         }
 
+        var recycleView = view.findViewById<RecyclerView>(R.id.list)
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
+        if (recycleView is RecyclerView) {
+            with(recycleView) {
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                lifecycleScope.launch {
+//                adapter = GroupCardRecyclerViewAdapter(ArrayList<GroupModel>())
+                lifecycleScope.launch(Dispatchers.IO) {
                     try {
+                        Log.d("Firebase", "data request sents")
                         val events = db.collection("Events")
                             .whereArrayContains(
                                 "users",
@@ -71,6 +76,8 @@ class GroupCardFragment : Fragment() {
                             eventList.add(event.toObject(GroupModel::class.java)!!)
                         }
 
+                        Log.d("Firebase", "event data fetched: ${eventList}")
+
                         for (i in 1..10) {
                             eventList.add(
                                 GroupModel(
@@ -80,9 +87,9 @@ class GroupCardFragment : Fragment() {
                                     description = "Some random test group")
                             )
                         }
-
-
-                        adapter = GroupCardRecyclerViewAdapter(eventList)
+                        withContext(Dispatchers.Main) {
+                            adapter = GroupCardRecyclerViewAdapter(eventList)
+                        }
                     }catch (e: Error) {
                         Log.e("Firebase", "failed to load event list", e)
                     }

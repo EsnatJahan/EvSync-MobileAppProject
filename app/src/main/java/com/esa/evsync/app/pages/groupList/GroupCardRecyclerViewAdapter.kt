@@ -15,7 +15,7 @@ import com.esa.evsync.databinding.FragmentGroupCardBinding
  * [RecyclerView.Adapter] that can display a [GroupModel]..
  */
 class GroupCardRecyclerViewAdapter(
-    private val values: List<GroupModel>
+    var values: List<GroupModel>
 ) : RecyclerView.Adapter<GroupCardRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
