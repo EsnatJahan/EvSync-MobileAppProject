@@ -16,6 +16,7 @@ import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.databinding.FragmentEventListBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class EventListFragment : Fragment() {
     private var columnCount = 1
     private val db = Firebase.firestore
     private lateinit var binding: FragmentEventListBinding
+    private lateinit var user: DocumentReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,8 @@ class EventListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEventListBinding.inflate(layoutInflater)
+
+        user = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
 
         binding.btnAddEvent.setOnClickListener {
             val navController = findNavController()
@@ -66,7 +70,7 @@ class EventListFragment : Fragment() {
                     val events = db.collection("events")
                         .whereArrayContains(
                             "members",
-                            FirebaseAuth.getInstance().currentUser!!.uid
+                            user
                         )
                         .get()
                         .await()

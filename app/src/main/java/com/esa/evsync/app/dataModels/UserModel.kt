@@ -7,5 +7,5 @@ data class UserModel(
     var username: String? = null,
     var email: String? = null,
     var phone: String? = null,
-    var profile_picture: Uri? = null,
+    var profile_picture: String? = null,
 )

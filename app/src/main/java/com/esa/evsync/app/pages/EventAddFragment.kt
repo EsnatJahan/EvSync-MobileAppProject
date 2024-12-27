@@ -14,7 +14,8 @@ import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.databinding.FragmentEventAddBinding
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ import kotlinx.coroutines.withContext
 class EventAddFragment : Fragment() {
     private lateinit var binding: FragmentEventAddBinding
     private val db = Firebase.firestore
+    private lateinit var user: DocumentReference
 
 
     override fun onCreateView(
@@ -39,6 +41,7 @@ class EventAddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        binding.ivPic.setOnClickListener(::addImage)
         binding.btnCreate.setOnClickListener(::addEvent)
+        user = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
     }
 
 //    private fun addImage(view: View?) {
@@ -49,13 +52,13 @@ class EventAddFragment : Fragment() {
             name = binding.etName.text.toString(),
             description = binding.etDesc.text.toString(),
             image = null,
-            owner = getInstance().currentUser?.uid,
-            members = ArrayList(listOf(getInstance().currentUser?.uid ?: "")),
+            owner = user,
+            members = ArrayList(listOf(user)),
             tasks = ArrayList()
         )
         
         if (event.name == null || event.name == "" || event.description == null || event.description == ""
-            || event.owner == null || event.owner == "") {
+            || event.owner == null) {
             Toast.makeText(requireContext(), "Insufficient information given", Toast.LENGTH_SHORT).show()
             return
         }
@@ -68,7 +71,6 @@ class EventAddFragment : Fragment() {
                 Toast.makeText(requireContext(), "Event created", Toast.LENGTH_SHORT).show()
                 val navController = findNavController()
                 navController.navigate(R.id.action_nav_eventAddFragment_to_nav_events)
-
             } catch (e: Error) {
                 Log.e("Firebase", "Failed to create event", e)
                 Toast.makeText(requireContext(), "Error occurred failed to register event", Toast.LENGTH_SHORT).show()

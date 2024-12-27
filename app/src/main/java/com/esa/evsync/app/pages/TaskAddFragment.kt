@@ -87,11 +87,14 @@ class TaskAddFragment : Fragment() {
     }
 
     private fun addTask(view: View?) {
+        val eventref = db.collection("events").document(eventId)
+
         val task = TaskModel(
             name = binding.etName.text.toString(),
             description = binding.etDesc.text.toString(),
             priority = TaskPriority.valueOf((binding.dropdownPriority.selectedItem as String).uppercase()),
             deadline = convertToDate(binding.tvDate.text.toString()),
+            eventRef = eventref,
             assigned = ArrayList(),
             complete = false
         )
@@ -110,8 +113,7 @@ class TaskAddFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    val documentref = db.collection("events").document(eventId)
-                    documentref.update("tasks", FieldValue.arrayUnion(task)).await()
+                   eventref.update("tasks", FieldValue.arrayUnion(task)).await()
                 }
                 Toast.makeText(requireContext(), "Task created", Toast.LENGTH_SHORT).show()
                 val navController = findNavController()

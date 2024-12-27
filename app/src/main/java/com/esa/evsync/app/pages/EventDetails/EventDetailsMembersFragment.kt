@@ -1,25 +1,100 @@
 package com.esa.evsync.app.pages.EventDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.esa.evsync.R
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.dataModels.UserModel
+import com.esa.evsync.app.pages.EventList.EventDetailsMembersRCAdapter
+import com.esa.evsync.app.pages.EventList.EventListFragment
+import com.esa.evsync.databinding.FragmentEventDetailsMembersBinding
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class EventDetailsMembersFragment(
     private var event: EventModel
 ) : Fragment() {
+    private var columnCount = 1
+    private val db = Firebase.firestore
+    private lateinit var binding: FragmentEventDetailsMembersBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details_members, container, false)
+    ): View {
+        binding = FragmentEventDetailsMembersBinding.inflate(layoutInflater)
+
+//        binding.btnAddMember.setOnClickListener {
+//            val navController = findNavController()
+//            val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavTaskAdd(
+//                eventId = event.id ?: "",
+//                eventName = event.name ?: "",
+//                eventDescription = event.description ?: ""
+//            )
+//            navController.navigate(action)
+//        }
+
+        var recycleView = binding.rcEventMembers
+        // Set the adapter
+        with(recycleView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                val members = ArrayList<UserModel>()
+                for (memberRef in event.members!!) {
+                    val memberData = memberRef.get().await()
+                    val member = memberData.toObject(UserModel::class.java)
+                    if (member != null) {
+                        member.id = memberData.id
+                        members.add(member)
+                    }
+
+                }
+                withContext(Dispatchers.Main) {
+                    adapter = EventDetailsMembersRCAdapter(members, event, binding.root)
+                }
+            }
+
+        }
+        return binding.root
     }
+
+
+    companion object {
+
+        // TODO: Customize parameter argument names
+        const val ARG_COLUMN_COUNT = "1"
+
+        // TODO: Customize parameter initialization
+        @JvmStatic
+        fun newInstance(columnCount: Int) =
+            EventListFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_COLUMN_COUNT, columnCount)
+                }
+            }
+    }
+
 }

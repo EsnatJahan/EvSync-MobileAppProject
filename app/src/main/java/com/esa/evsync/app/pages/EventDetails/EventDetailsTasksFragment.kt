@@ -38,8 +38,7 @@ class EventDetailsTasksFragment(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-//        val view = inflater.inflate(R.layout.fragment_event_details_tasks, container, false)
+    ): View {
         binding = FragmentEventDetailsTasksBinding.inflate(layoutInflater)
 
         binding.btnAddTask.setOnClickListener {

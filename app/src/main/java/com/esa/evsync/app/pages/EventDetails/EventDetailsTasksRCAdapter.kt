@@ -55,7 +55,7 @@ class EventDetailsTasksRCAdapter(
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
         val idDesc: TextView = binding.tvDescription
-        val idImage: ImageView = binding.imImage
+//        val idImage: ImageView = binding.imImage
 
         init {
 //            binding.root.setOnClickListener {

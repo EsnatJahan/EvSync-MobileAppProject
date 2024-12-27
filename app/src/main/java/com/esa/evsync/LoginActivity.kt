@@ -1,54 +1,35 @@
 package com.esa.evsync
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.credentials.Credential
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import com.esa.evsync.app.dataModels.UserModel
 import com.esa.evsync.databinding.ActivityLoginBinding
 
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.Firebase
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlin.collections.hashMapOf
 
 class LoginActivity : AppCompatActivity() {
-    private val splashDelay: Long = 1000
-
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
     private lateinit var binding: ActivityLoginBinding
-
-//    private lateinit var credentialsClient: CredentialsClient
 
     private lateinit var credentialManager: CredentialManager
     private lateinit var context: LoginActivity
@@ -58,9 +39,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
-
         context = this
-
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
@@ -98,28 +77,28 @@ class LoginActivity : AppCompatActivity() {
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
             val firebaseCredential = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
             val res = Firebase.auth.signInWithCredential(firebaseCredential).await()
-            val user = auth.currentUser
-            val isNewUser = res.additionalUserInfo?.isNewUser ?: false
-            if (isNewUser) {
-//                Firebase.auth.currentUser!!.linkWithCredential(firebaseCredential).await()
-                val user = hashMapOf(
-                    "username" to user?.displayName,
-                    "email" to user?.email,
-                    "phone" to user?.phoneNumber,
-                    "profile_picture" to user?.photoUrl
-                )
-                try {
-                    val ref = db.collection("users").add(user).await()
-                } catch (e:Error) {
-                    Log.e("firebase", "failed to insert data", e)
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                val isNewUser = res.additionalUserInfo?.isNewUser ?: false
+                if (isNewUser) {
+                    val user = UserModel(
+                        username = currentUser.displayName,
+                        email = currentUser.email,
+                        phone = currentUser.phoneNumber,
+                        profile_picture = currentUser.photoUrl.toString()
+                    )
+                    try {
+                        db.collection("users").document(currentUser.uid).set(user).await()
+                    } catch (e: Error) {
+                        Log.e("firebase", "failed to insert data", e)
+                    }
                 }
+                Log.d("GoogleSignIn", "Sign-In successful: ${currentUser?.email}")
+                startActivity(Intent(this, AppActivity::class.java))
+                finish()
             }
-            Log.d("GoogleSignIn", "Sign-In successful: ${user?.email}")
-            startActivity(Intent(this, AppActivity::class.java))
-            finish()
         } else {
             Log.e("GoogleSignIn", "Unexpected credential")
         }
     }
-
 }
