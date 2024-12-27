@@ -17,7 +17,7 @@ import com.esa.evsync.databinding.FragmentEventCardBinding
  * [RecyclerView.Adapter] that can display a [EventModel]..
  */
 class EventCardRecyclerViewAdapter(
-    var values: List<EventModel>,
+    var events: List<EventModel>,
     private val itemView: View // fragments context
 ) : RecyclerView.Adapter<EventCardRecyclerViewAdapter.ViewHolder>() {
 
@@ -33,7 +33,7 @@ class EventCardRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+        val item = events[position]
         holder.idName.text = item.name?:"Unknown group"
         holder.idDesc.text = item.description?:"Unknown description"
         val context = holder.idName.context
@@ -48,7 +48,7 @@ class EventCardRecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = events.size
 
     inner class ViewHolder(binding: FragmentEventCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -60,7 +60,11 @@ class EventCardRecyclerViewAdapter(
             binding.root.setOnClickListener {
                 if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
                     val navController = itemView.findNavController()
-                    val action = EventCardFragmentDirections.actionNavEventsToNavEventDetails(values[bindingAdapterPosition]?.id ?: "")
+                    val action = EventListFragmentDirections.actionNavEventsToNavEventDetails(
+                        eventId = events[bindingAdapterPosition].id ?: "",
+                        eventName = events[bindingAdapterPosition].name ?: "",
+                        eventDescription = events[bindingAdapterPosition].description ?: ""
+                    )
                     navController.navigate(action)
                 }
             }

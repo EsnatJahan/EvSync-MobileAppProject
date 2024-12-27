@@ -47,6 +47,11 @@ class EventDetailsFragment : Fragment() {
         val viewPager2: ViewPager2 = binding.vpEventDetails
 
         val fragment = this
+
+        binding.tvName.text = args.eventName
+        binding.tvDescriptiopn.text = args.eventDescription
+
+        showLoading(true)
         lifecycleScope.launch {
             val ref = withContext(Dispatchers.IO) {
                 db.collection("events").document(id).get().await()
@@ -54,11 +59,6 @@ class EventDetailsFragment : Fragment() {
             event = ref.toObject(EventModel::class.java)!!
             event.id = ref.id
 
-            binding.tvName.text = event.name
-            binding.tvDescriptiopn.text = event.description
-
-
-            Log.d("event details", "id: ${id}")
             // Set the adapter for ViewPager2
             viewPager2.adapter = EventDetailsPagerAdapter(fragment, event)
             // Connect TabLayout and ViewPager2
@@ -68,6 +68,18 @@ class EventDetailsFragment : Fragment() {
                     else -> "Members"
                 }
             }.attach()
+            showLoading(false)
+        }
+    }
+
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbTlDetails.visibility = View.VISIBLE
+            binding.vpEventDetails.visibility = View.GONE
+        } else {
+            binding.pbTlDetails.visibility = View.GONE
+            binding.vpEventDetails.visibility = View.VISIBLE
         }
     }
 }

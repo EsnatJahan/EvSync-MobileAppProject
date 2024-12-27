@@ -117,7 +117,11 @@ class TaskAddFragment : Fragment() {
                 }
                 Toast.makeText(requireContext(), "Task created", Toast.LENGTH_SHORT).show()
                 val navController = findNavController()
-                val action = TaskAddFragmentDirections.actionNavTaskAddToNavEventDetails(eventId)
+                val action = TaskAddFragmentDirections.actionNavTaskAddToNavEventDetails(
+                    eventId = eventId,
+                    eventName = args.eventName,
+                    eventDescription = args.eventDescription
+                )
                 navController.navigate(action)
             } catch (e: Error) {
                 Log.e("Firebase", "Failed to create event", e)

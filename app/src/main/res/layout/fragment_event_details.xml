@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.20" />
 
     <TextView
         android:id="@+id/tvName"
@@ -38,8 +38,8 @@
 
     <ImageView
         android:id="@+id/imDescImage"
-        android:layout_width="86dp"
-        android:layout_height="92dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="36dp"
         app:tint="@color/action"
         android:src="@drawable/baseline_event_black_24dp"
@@ -67,6 +67,19 @@
             android:text="Members" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_tl_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tl_event_details"
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp_event_details"

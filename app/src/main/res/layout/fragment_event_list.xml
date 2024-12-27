@@ -5,8 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/pb_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/rc_events"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="16dp"
@@ -16,8 +29,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".app.pages.EventList.EventCardFragment"
-        tools:listitem="@layout/fragment_event_card"/>
+        tools:context=".app.pages.EventList.EventListFragment"
+        tools:listitem="@layout/fragment_event_card" />
 
     <ImageView
         android:id="@+id/btnAddEvent"
@@ -28,7 +41,6 @@
         android:src="@drawable/baseline_add_circle_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/teal_700"
-        />
+        app:tint="@color/teal_700" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

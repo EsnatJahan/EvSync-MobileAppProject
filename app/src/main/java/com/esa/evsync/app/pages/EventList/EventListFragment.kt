@@ -1,6 +1,5 @@
 package com.esa.evsync.app.pages.EventList
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,10 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.databinding.FragmentEventListBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -27,11 +26,11 @@ import kotlinx.coroutines.withContext
 /**
  * A fragment representing a list of Items.
  */
-class EventCardFragment : Fragment() {
+class EventListFragment : Fragment() {
 
     private var columnCount = 1
     private val db = Firebase.firestore
-
+    private lateinit var binding: FragmentEventListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +40,21 @@ class EventCardFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_event_list, container, false)
+        binding = FragmentEventListBinding.inflate(layoutInflater)
 
 
-        view.findViewById<ImageView>(R.id.btnAddEvent).setOnClickListener {
+        binding.btnAddEvent.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.action_eventsFragment_to_eventAddFragment)
         }
 
-        var recycleView = view.findViewById<RecyclerView>(R.id.list)
+        showLoading(true)
+        var recycleView = binding.rcEvents
         // Set the adapter
         if (recycleView is RecyclerView) {
             with(recycleView) {
@@ -63,7 +64,6 @@ class EventCardFragment : Fragment() {
                 }
                 lifecycleScope.launch(Dispatchers.IO) {
                     try {
-                        Log.d("Firebase", "data request sents")
                         val events = db.collection("events")
                             .whereArrayContains(
                                 "members",
@@ -78,18 +78,27 @@ class EventCardFragment : Fragment() {
                             eventList.add(eventData)
                         }
 
-                        Log.d("Firebase", "event data fetched: ${eventList}")
                         withContext(Dispatchers.Main) {
-                            adapter = EventCardRecyclerViewAdapter(eventList, view)
+                            adapter = EventCardRecyclerViewAdapter(eventList, binding.root)
+                            showLoading(false)
                         }
                     }catch (e: Error) {
                         Log.e("Firebase", "failed to load event list", e)
                     }
                 }
-
             }
         }
-        return view
+        return binding.root
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbEvents.visibility = View.VISIBLE
+            binding.rcEvents.visibility = View.GONE
+        } else {
+            binding.pbEvents.visibility = View.GONE
+            binding.rcEvents.visibility = View.VISIBLE
+        }
     }
 
     companion object {
@@ -100,7 +109,7 @@ class EventCardFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            EventCardFragment().apply {
+            EventListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
