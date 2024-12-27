@@ -80,7 +80,7 @@ class EventCardFragment : Fragment() {
 
                         Log.d("Firebase", "event data fetched: ${eventList}")
                         withContext(Dispatchers.Main) {
-                            adapter = EventCardRecyclerViewAdapter(eventList, requireView())
+                            adapter = EventCardRecyclerViewAdapter(eventList, view)
                         }
                     }catch (e: Error) {
                         Log.e("Firebase", "failed to load event list", e)

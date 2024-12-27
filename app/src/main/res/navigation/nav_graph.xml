@@ -17,8 +17,7 @@
             app:destination="@id/nav_eventAddFragment" />
         <action
             android:id="@+id/action_nav_events_to_nav_event_details"
-            app:destination="@id/nav_event_details" >indViewById(R.id.viewPager2)
-
+            app:destination="@id/nav_event_details" >
         </action>
     </fragment>
 
@@ -42,5 +41,20 @@
         <argument
             android:name="eventId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_nav_event_details_to_nav_task_add"
+            app:destination="@id/nav_task_add" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_task_add"
+        android:name="com.esa.evsync.app.pages.TaskAddFragment"
+        android:label="Add Task">
+        <argument
+            android:name="eventId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_task_add_to_nav_event_details"
+            app:destination="@id/nav_event_details" />
     </fragment>
 </navigation>

@@ -1,32 +1,45 @@
 package com.esa.evsync.app.pages.EventDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.esa.evsync.R
+import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.dataModels.TaskModel
+import com.esa.evsync.app.pages.EventList.EventCardFragment
+import com.esa.evsync.app.pages.EventList.EventCardFragmentDirections
+import com.esa.evsync.app.pages.EventList.EventCardRecyclerViewAdapter
+import com.esa.evsync.app.pages.EventList.EventDetailsTasksRCAdapter
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class EventDetailsTasksFragment(
+    private var event: EventModel
+) : Fragment() {
+    private var columnCount = 1
+    private val db = Firebase.firestore
 
-/**
- * A simple [Fragment] subclass.
- * Use the [EventDetailsTasksFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class EventDetailsTasksFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
     }
 
@@ -34,27 +47,43 @@ class EventDetailsTasksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details_tasks, container, false)
+        val view = inflater.inflate(R.layout.fragment_event_details_tasks, container, false)
+
+
+        view.findViewById<ImageView>(R.id.btnAddTask).setOnClickListener {
+            val navController = findNavController()
+            val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavTaskAdd(event.id ?: "")
+            navController.navigate(action)
+        }
+
+        var recycleView = view.findViewById<RecyclerView>(R.id.rc_eventTasks)
+        // Set the adapter
+        if (recycleView is RecyclerView) {
+            with(recycleView) {
+                layoutManager = when {
+                    columnCount <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount)
+                }
+                adapter = EventDetailsTasksRCAdapter(event.tasks ?: ArrayList<TaskModel>(), view)
+
+            }
+        }
+        return view
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EventDetailsTasksFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        // TODO: Customize parameter argument names
+        const val ARG_COLUMN_COUNT = "1"
+
+        // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EventDetailsTasksFragment().apply {
+        fun newInstance(columnCount: Int) =
+            EventCardFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
     }
+
 }
