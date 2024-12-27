@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
@@ -44,47 +43,46 @@ class EventListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentEventListBinding.inflate(layoutInflater)
-
 
         binding.btnAddEvent.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.action_eventsFragment_to_eventAddFragment)
         }
 
-        showLoading(true)
-        var recycleView = binding.rcEvents
-        // Set the adapter
-        if (recycleView is RecyclerView) {
-            with(recycleView) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                lifecycleScope.launch(Dispatchers.IO) {
-                    try {
-                        val events = db.collection("events")
-                            .whereArrayContains(
-                                "members",
-                                FirebaseAuth.getInstance().currentUser!!.uid
-                            )
-                            .get()
-                            .await()
-                        val eventList = ArrayList<EventModel>()
-                        for (event in events.documents) {
-                            var eventData = event.toObject(EventModel::class.java)!!
-                            eventData.id = event.id
-                            eventList.add(eventData)
-                        }
+        showLoading(true) // show loading screen
 
-                        withContext(Dispatchers.Main) {
-                            adapter = EventCardRecyclerViewAdapter(eventList, binding.root)
-                            showLoading(false)
-                        }
-                    }catch (e: Error) {
-                        Log.e("Firebase", "failed to load event list", e)
+        val recycleView = binding.rcEvents
+        // Set the adapter
+        with(recycleView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val events = db.collection("events")
+                        .whereArrayContains(
+                            "members",
+                            FirebaseAuth.getInstance().currentUser!!.uid
+                        )
+                        .get()
+                        .await()
+                    val eventList = ArrayList<EventModel>()
+                    for (event in events.documents) {
+                        var eventData = event.toObject(EventModel::class.java)!!
+                        eventData.id = event.id
+                        eventList.add(eventData)
                     }
+
+                    withContext(Dispatchers.Main) {
+                        adapter = EventListRecyclerViewAdapter(eventList, binding.root)
+                        showLoading(false)
+                    }
+                }catch (e: Error) {
+                    Log.e("Firebase", "failed to load event list", e)
                 }
             }
         }
@@ -102,7 +100,6 @@ class EventListFragment : Fragment() {
     }
 
     companion object {
-
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "1"
 

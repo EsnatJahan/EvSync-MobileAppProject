@@ -10,16 +10,15 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
-
 import com.esa.evsync.databinding.FragmentEventCardBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [EventModel]..
  */
-class EventCardRecyclerViewAdapter(
+class EventListRecyclerViewAdapter(
     var events: List<EventModel>,
     private val itemView: View // fragments context
-) : RecyclerView.Adapter<EventCardRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<EventListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
