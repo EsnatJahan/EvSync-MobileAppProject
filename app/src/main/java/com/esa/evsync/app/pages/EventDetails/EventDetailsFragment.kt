@@ -36,12 +36,14 @@ class EventDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEventDetailsBinding.inflate(inflater)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.title = args.eventName
         val id = args.eventId
         val tabLayout: TabLayout = binding.tlEventDetails
         val viewPager2: ViewPager2 = binding.vpEventDetails

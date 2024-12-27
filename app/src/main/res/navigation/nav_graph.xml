@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.esa.evsync.app.pages.ProfileFragment"
-        android:label="Settings" />
+        android:label="Profile" />
     <fragment
         android:id="@+id/nav_eventAddFragment"
         android:name="com.esa.evsync.app.pages.EventAddFragment"
@@ -37,7 +37,7 @@
     <fragment
         android:id="@+id/nav_event_details"
         android:name="com.esa.evsync.app.pages.EventDetails.EventDetailsFragment"
-        android:label="EventDetails">
+        android:label="Event Details">
         <argument
             android:name="eventId"
             app:argType="string" />

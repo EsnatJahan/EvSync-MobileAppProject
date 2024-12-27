@@ -18,7 +18,6 @@ import com.esa.evsync.app.dataModels.TaskModel
 import com.esa.evsync.app.dataModels.TaskPriority
 import com.esa.evsync.databinding.FragmentTaskAddBinding
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth.*
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
@@ -33,15 +32,14 @@ import java.util.Locale
 
 class TaskAddFragment : Fragment() {
     private val args: TaskAddFragmentArgs by navArgs()
-    lateinit var binding: FragmentTaskAddBinding
-    private var original_title: String? = null
+    private lateinit var binding: FragmentTaskAddBinding
     private val db = Firebase.firestore
     private lateinit var eventId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTaskAddBinding.inflate(inflater)
         return binding.root
     }
@@ -89,7 +87,7 @@ class TaskAddFragment : Fragment() {
     }
 
     private fun addTask(view: View?) {
-        var task = TaskModel(
+        val task = TaskModel(
             name = binding.etName.text.toString(),
             description = binding.etDesc.text.toString(),
             priority = TaskPriority.valueOf((binding.dropdownPriority.selectedItem as String).uppercase()),
@@ -112,8 +110,8 @@ class TaskAddFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 withContext(Dispatchers.IO) {
-                    val decumentref = db.collection("events").document(eventId)
-                    decumentref.update("tasks", FieldValue.arrayUnion(task)).await()
+                    val documentref = db.collection("events").document(eventId)
+                    documentref.update("tasks", FieldValue.arrayUnion(task)).await()
                 }
                 Toast.makeText(requireContext(), "Task created", Toast.LENGTH_SHORT).show()
                 val navController = findNavController()
@@ -125,19 +123,9 @@ class TaskAddFragment : Fragment() {
                 navController.navigate(action)
             } catch (e: Error) {
                 Log.e("Firebase", "Failed to create event", e)
-                Toast.makeText(requireContext(), "Error occured failed to register event", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error occurred failed to register event", Toast.LENGTH_SHORT).show()
             }
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        original_title = activity?.title as? String
-        activity?.title = "Add Task"
-    }
-    override fun onStop() {
-        super.onStop()
-        activity?.title = original_title
     }
 }

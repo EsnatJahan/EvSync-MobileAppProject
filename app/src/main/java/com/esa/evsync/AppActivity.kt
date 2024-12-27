@@ -2,12 +2,17 @@ package com.esa.evsync
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.esa.evsync.app.models.AppViewModel
 import com.esa.evsync.databinding.ActivityAppBinding
@@ -17,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 class AppActivity : AppCompatActivity() {
     private val model: AppViewModel by viewModels()
     lateinit private var binding: ActivityAppBinding
-
+    lateinit private var navController: NavController
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -39,13 +44,10 @@ class AppActivity : AppCompatActivity() {
         // Initialize NavHostFragment and NavController
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.appBody) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         // Set up Bottom Navigation
         binding.bottomNav.setupWithNavController(navController)
-//        navController.addOnDestinationChangedListener {navController, dest, bundle ->
-//            botNavDestListener(navController, dest, bundle)
-//        }
 
 //         Handle the Bottom Navigation item clicks
         binding.bottomNav.setOnItemSelectedListener { item ->
@@ -66,6 +68,17 @@ class AppActivity : AppCompatActivity() {
             }
         }
 
+//        // setup navigation actionbar
+//        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        val appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.nav_tasks,
+            R.id.nav_events,
+            R.id.nav_profile
+        ))
+
+        // Link NavController with the default ActionBar
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.app)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -73,23 +86,8 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-//    private var suppressNavListener = false
-//    private fun botNavDestListener (navController: NavController, destination: NavDestination, bundle: Bundle?) {
-//
-//        if (!suppressNavListener
-//            && destination.id in NavMap.destinationToNavItemMap
-//            && binding.bottomNav.selectedItemId != destination.id
-//            && binding.bottomNav.selectedItemId != NavMap.destinationToNavItemMap[destination.id]) {
-//            Log.d("nav transition", """"
-//                    | destination: ${destination.id}
-//                    | mapped: ${NavMap.destinationToNavItemMap[destination.id]}
-//                    | selected: ${binding.bottomNav.selectedItemId}
-//                """.trimIndent())
-//            suppressNavListener = true
-//            binding.bottomNav.selectedItemId = NavMap.destinationToNavItemMap[destination.id]!!
-//            suppressNavListener = false
-//            Log.d("nav transition", "set now: ${binding.bottomNav.selectedItemId}")
-//        }
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 
 }
