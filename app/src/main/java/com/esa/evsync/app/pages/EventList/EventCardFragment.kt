@@ -18,6 +18,7 @@ import com.esa.evsync.app.dataModels.EventModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -60,7 +61,6 @@ class EventCardFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-//                adapter = GroupCardRecyclerViewAdapter(ArrayList<GroupModel>())
                 lifecycleScope.launch(Dispatchers.IO) {
                     try {
                         Log.d("Firebase", "data request sents")
@@ -73,22 +73,14 @@ class EventCardFragment : Fragment() {
                             .await()
                         val eventList = ArrayList<EventModel>()
                         for (event in events.documents) {
-                            eventList.add(event.toObject(EventModel::class.java)!!)
+                            var eventData = event.toObject(EventModel::class.java)!!
+                            eventData.id = event.id
+                            eventList.add(eventData)
                         }
 
                         Log.d("Firebase", "event data fetched: ${eventList}")
-
-//                        for (i in 1..10) {
-//                            eventList.add(
-//                                EventModel(
-//                                    name = "Group",
-//                                    members = ArrayList<String>(),
-//                                    image = Uri.parse("https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"),
-//                                    description = "Some random test group")
-//                            )
-//                        }
                         withContext(Dispatchers.Main) {
-                            adapter = EventCardRecyclerViewAdapter(eventList)
+                            adapter = EventCardRecyclerViewAdapter(eventList, requireView())
                         }
                     }catch (e: Error) {
                         Log.e("Firebase", "failed to load event list", e)

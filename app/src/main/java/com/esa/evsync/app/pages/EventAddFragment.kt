@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.dataModels.TaskModel
 import com.esa.evsync.databinding.FragmentEventAddBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -52,7 +53,8 @@ class EventAddFragment : Fragment() {
             description = binding.etDesc.text.toString(),
             image = null,
             owner = getInstance().currentUser?.uid,
-            members = ArrayList(listOf(getInstance().currentUser?.uid ?: ""))
+            members = ArrayList(listOf(getInstance().currentUser?.uid ?: "")),
+            tasks = ArrayList()
         )
         
         if (event.name == null || event.name == "" || event.description == null || event.description == ""

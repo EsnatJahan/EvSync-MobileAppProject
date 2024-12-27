@@ -7,6 +7,7 @@
         android:id="@+id/nav_tasks"
         android:name="com.esa.evsync.app.pages.TaskListFragment"
         android:label="Tasks" />
+
     <fragment
         android:id="@+id/nav_events"
         android:name="com.esa.evsync.app.pages.EventList.EventCardFragment"
@@ -14,6 +15,11 @@
         <action
             android:id="@+id/action_eventsFragment_to_eventAddFragment"
             app:destination="@id/nav_eventAddFragment" />
+        <action
+            android:id="@+id/action_nav_events_to_nav_event_details"
+            app:destination="@id/nav_event_details" >indViewById(R.id.viewPager2)
+
+        </action>
     </fragment>
 
     <fragment
@@ -27,5 +33,14 @@
         <action
             android:id="@+id/action_nav_eventAddFragment_to_nav_events"
             app:destination="@id/nav_events" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_event_details"
+        android:name="com.esa.evsync.app.pages.EventDetails.EventDetailsFragment"
+        android:label="EventDetails">
+        <argument
+            android:name="eventId"
+            app:argType="string" />
     </fragment>
 </navigation>

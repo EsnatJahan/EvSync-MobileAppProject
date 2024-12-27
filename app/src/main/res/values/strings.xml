@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EvSync</string>
-<!--    <string name="default_web_client_id">1019329049883-iol4rhq76ajc6209i9p1ppc5af936d36.apps.googleusercontent.com</string>-->
+    <!--    <string name="default_web_client_id">1019329049883-iol4rhq76ajc6209i9p1ppc5af936d36.apps.googleusercontent.com</string>-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
