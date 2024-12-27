@@ -2,19 +2,14 @@ package com.esa.evsync
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.esa.evsync.app.models.AppViewModel
-import com.esa.evsync.app.nav.NavMap
 import com.esa.evsync.databinding.ActivityAppBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -63,8 +58,8 @@ class AppActivity : AppCompatActivity() {
                     navController.navigate(R.id.nav_tasks)
                     true
                 }
-                R.id.nav_settings -> {
-                    navController.navigate(R.id.nav_settings)
+                R.id.nav_profile -> {
+                    navController.navigate(R.id.nav_profile)
                     true
                 }
                 else -> false

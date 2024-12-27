@@ -9,7 +9,7 @@ class NavMap {
             R.id.nav_eventAddFragment to R.id.nav_events,
             R.id.nav_events to R.id.nav_events,
             R.id.nav_tasks to R.id.nav_tasks,
-            R.id.nav_settings to R.id.nav_settings
+            R.id.nav_profile to R.id.nav_profile
         )
     }
 }

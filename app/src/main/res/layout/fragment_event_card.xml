@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/im_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:paddingHorizontal="4dp"
             android:paddingVertical="2dp"
             app:srcCompat="@android:drawable/ic_menu_gallery" />

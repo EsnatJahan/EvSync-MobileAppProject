@@ -14,7 +14,7 @@ import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
-import com.esa.evsync.app.dataModels.GroupModel
+import com.esa.evsync.app.dataModels.EventModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
@@ -64,29 +64,29 @@ class EventCardFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     try {
                         Log.d("Firebase", "data request sents")
-                        val events = db.collection("Events")
+                        val events = db.collection("events")
                             .whereArrayContains(
-                                "users",
+                                "members",
                                 FirebaseAuth.getInstance().currentUser!!.uid
                             )
                             .get()
                             .await()
-                        val eventList = ArrayList<GroupModel>()
+                        val eventList = ArrayList<EventModel>()
                         for (event in events.documents) {
-                            eventList.add(event.toObject(GroupModel::class.java)!!)
+                            eventList.add(event.toObject(EventModel::class.java)!!)
                         }
 
                         Log.d("Firebase", "event data fetched: ${eventList}")
 
-                        for (i in 1..10) {
-                            eventList.add(
-                                GroupModel(
-                                    name = "Group",
-                                    members = ArrayList<String>(),
-                                    image = Uri.parse("https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"),
-                                    description = "Some random test group")
-                            )
-                        }
+//                        for (i in 1..10) {
+//                            eventList.add(
+//                                EventModel(
+//                                    name = "Group",
+//                                    members = ArrayList<String>(),
+//                                    image = Uri.parse("https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"),
+//                                    description = "Some random test group")
+//                            )
+//                        }
                         withContext(Dispatchers.Main) {
                             adapter = EventCardRecyclerViewAdapter(eventList)
                         }

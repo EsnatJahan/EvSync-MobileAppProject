@@ -17,11 +17,15 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.esa.evsync.app.pages.SettingsFragment"
+        android:id="@+id/nav_profile"
+        android:name="com.esa.evsync.app.pages.ProfileFragment"
         android:label="Settings" />
     <fragment
         android:id="@+id/nav_eventAddFragment"
         android:name="com.esa.evsync.app.pages.EventAddFragment"
-        android:label="Add Event" />
+        android:label="Add Event" >
+        <action
+            android:id="@+id/action_nav_eventAddFragment_to_nav_events"
+            app:destination="@id/nav_events" />
+    </fragment>
 </navigation>

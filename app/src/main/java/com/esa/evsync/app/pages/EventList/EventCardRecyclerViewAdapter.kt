@@ -7,15 +7,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.esa.evsync.R
-import com.esa.evsync.app.dataModels.GroupModel
+import com.esa.evsync.app.dataModels.EventModel
 
 import com.esa.evsync.databinding.FragmentEventCardBinding
 
 /**
- * [RecyclerView.Adapter] that can display a [GroupModel]..
+ * [RecyclerView.Adapter] that can display a [EventModel]..
  */
 class EventCardRecyclerViewAdapter(
-    var values: List<GroupModel>
+    var values: List<EventModel>
 ) : RecyclerView.Adapter<EventCardRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,9 +38,11 @@ class EventCardRecyclerViewAdapter(
         if (item.image != null) {
             Glide.with(context)
                 .load(item.image)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.baseline_settings_black_24dp)
+                .placeholder(R.drawable.baseline_cached_black_24dp)
+                .error(R.drawable.baseline_sync_problem_black_24dp)
                 .into(holder.idImage)
+        } else {
+            holder.idImage.setImageResource(R.drawable.baseline_event_black_24dp)
         }
     }
 

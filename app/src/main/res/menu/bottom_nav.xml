@@ -9,7 +9,7 @@
         android:title="Events"
         android:icon="@drawable/baseline_event_black_24dp" />
     <item
-        android:id="@+id/nav_settings"
-        android:title="Settings"
-        android:icon="@drawable/baseline_settings_black_24dp" />
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/baseline_account_circle_black_24dp" />
 </menu>
