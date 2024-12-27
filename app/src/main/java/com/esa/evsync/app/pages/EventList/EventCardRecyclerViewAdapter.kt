@@ -1,4 +1,4 @@
-package com.esa.evsync.app.pages.groupList
+package com.esa.evsync.app.pages.EventList
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -9,19 +9,19 @@ import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.GroupModel
 
-import com.esa.evsync.databinding.FragmentGroupCardBinding
+import com.esa.evsync.databinding.FragmentEventCardBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [GroupModel]..
  */
-class GroupCardRecyclerViewAdapter(
+class EventCardRecyclerViewAdapter(
     var values: List<GroupModel>
-) : RecyclerView.Adapter<GroupCardRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<EventCardRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return ViewHolder(
-            FragmentGroupCardBinding.inflate(
+            FragmentEventCardBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -46,7 +46,7 @@ class GroupCardRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(binding: FragmentGroupCardBinding) :
+    inner class ViewHolder(binding: FragmentEventCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
         val idDesc: TextView = binding.tvDescription

@@ -1,4 +1,4 @@
-package com.esa.evsync.app.pages.groupList
+package com.esa.evsync.app.pages.EventList
 
 import android.net.Uri
 import android.os.Bundle
@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 /**
  * A fragment representing a list of Items.
  */
-class GroupCardFragment : Fragment() {
+class EventCardFragment : Fragment() {
 
     private var columnCount = 1
     private val db = Firebase.firestore
@@ -44,7 +44,7 @@ class GroupCardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_group_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_event_list, container, false)
 
 
         view.findViewById<ImageView>(R.id.btnAddEvent).setOnClickListener {
@@ -88,7 +88,7 @@ class GroupCardFragment : Fragment() {
                             )
                         }
                         withContext(Dispatchers.Main) {
-                            adapter = GroupCardRecyclerViewAdapter(eventList)
+                            adapter = EventCardRecyclerViewAdapter(eventList)
                         }
                     }catch (e: Error) {
                         Log.e("Firebase", "failed to load event list", e)
@@ -108,7 +108,7 @@ class GroupCardFragment : Fragment() {
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
-            GroupCardFragment().apply {
+            EventCardFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }

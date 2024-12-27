@@ -9,7 +9,7 @@
         android:label="Tasks" />
     <fragment
         android:id="@+id/nav_events"
-        android:name="com.esa.evsync.app.pages.groupList.GroupCardFragment"
+        android:name="com.esa.evsync.app.pages.EventList.EventCardFragment"
         android:label="Events" >
         <action
             android:id="@+id/action_eventsFragment_to_eventAddFragment"
