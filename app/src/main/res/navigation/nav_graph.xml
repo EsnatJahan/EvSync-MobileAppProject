@@ -1,5 +1,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/nav_tasks">
 
@@ -21,10 +22,6 @@
         </action>
     </fragment>
 
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.esa.evsync.app.pages.ProfileFragment"
-        android:label="Profile" />
     <fragment
         android:id="@+id/nav_eventAddFragment"
         android:name="com.esa.evsync.app.pages.EventAddFragment"
@@ -69,4 +66,20 @@
             android:id="@+id/action_nav_task_add_to_nav_event_details"
             app:destination="@id/nav_event_details" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.esa.evsync.app.pages.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_to_editProfile"
+            app:destination="@id/nav_editProfile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_editProfile"
+        android:name="com.esa.evsync.app.pages.EditProfileFragment"
+        android:label="EditProfile"
+        tools:layout="@layout/fragment_edit_profile"/>
 </navigation>
