@@ -5,27 +5,20 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.pages.TaskListFragment">
+    tools:context=".app.pages.TaskListFragment"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-<!--    <TextView-->
-<!--        android:id="@+id/textView"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Tasks fragment"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="411dp"
-        android:layout_height="216dp"
+        android:id="@+id/taskimg"
+        android:layout_width="413dp"
+        android:layout_height="222dp"
         android:src="@drawable/knot"
         android:tooltipText=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -34,7 +27,7 @@
     </ImageView>
 
     <TextView
-        android:id="@+id/taskimg"
+
         android:layout_width="169dp"
         android:layout_height="69dp"
         android:layout_marginTop="28dp"
@@ -47,30 +40,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
+        android:id="@+id/idDateTextView"
         android:layout_width="205dp"
         android:layout_height="40dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="112dp"
         android:text="15thDecember"
         android:textColor="@color/black"
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.077"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskimg"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <CalendarView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:background="#CAD2D9"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView1"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/taskimg"
+        tools:context=".app.pages.TaskListFragment"
+        tools:listitem="@layout/taskitem" />
+
+<!--        <CalendarView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="4dp"-->
+<!--        android:background="#CAD2D9"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.491"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/imageView1"-->
+<!--        app:layout_constraintVertical_bias="1.0" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
