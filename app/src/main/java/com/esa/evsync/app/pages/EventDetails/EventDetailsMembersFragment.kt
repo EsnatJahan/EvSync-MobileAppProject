@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.UserModel
 import com.esa.evsync.app.pages.EventList.EventDetailsMembersRCAdapter
 import com.esa.evsync.app.pages.EventList.EventListFragment
+import com.esa.evsync.app.pages.MemberSearch.MemberResultModel
 import com.esa.evsync.databinding.FragmentEventDetailsMembersBinding
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,17 +47,17 @@ class EventDetailsMembersFragment(
     ): View {
         binding = FragmentEventDetailsMembersBinding.inflate(layoutInflater)
 
-//        binding.btnAddMember.setOnClickListener {
-//            val navController = findNavController()
-//            val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavTaskAdd(
-//                eventId = event.id ?: "",
-//                eventName = event.name ?: "",
-//                eventDescription = event.description ?: ""
-//            )
-//            navController.navigate(action)
-//        }
+        binding.btnAddMember.setOnClickListener {
+            val navController = findNavController()
+            val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavMemberAdd(
+                eventId = event.id ?: ""
+            )
+            navController.navigate(action)
+        }
 
-        var recycleView = binding.rcEventMembers
+
+
+        val recycleView = binding.rcEventMembers
         // Set the adapter
         with(recycleView) {
             layoutManager = when {

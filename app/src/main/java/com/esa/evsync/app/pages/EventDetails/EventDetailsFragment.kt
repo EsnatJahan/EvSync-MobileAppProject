@@ -1,6 +1,7 @@
 package com.esa.evsync.app.pages.EventDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.pages.MemberSearch.MemberResultModel
 import com.esa.evsync.databinding.FragmentEventDetailsBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +52,18 @@ class EventDetailsFragment : Fragment() {
         binding.tvName.text = args.eventName
         binding.tvDescriptiopn.text = args.eventDescription
 
+        parentFragmentManager.setFragmentResultListener("request_add_member", viewLifecycleOwner) { requestKey, bundle ->
+            if (requestKey == "request_add_member") {
+                val selectedResults = bundle.getParcelableArrayList<MemberResultModel>("new_members")
+                Log.d("Add members", "$selectedResults")
+                selectedResults?.let { selectedItems ->
+                    // add members
+                    val eventRef = db.collection("events").document(event.id!!)
+                    val userRefs = selectedItems.map { db.collection("users").document(it.id)}
+                    eventRef.update("members", FieldValue.arrayUnion(userRefs))
+                }
+            }
+        }
         showLoading(true)
         lifecycleScope.launch {
             val ref = withContext(Dispatchers.IO) {
@@ -66,6 +82,19 @@ class EventDetailsFragment : Fragment() {
                 }
             }.attach()
             showLoading(false)
+        }
+
+        parentFragmentManager.setFragmentResultListener("request_add_member", viewLifecycleOwner) { requestKey, bundle ->
+            if (requestKey == "request_add_member") {
+                val selectedResults = bundle.getParcelableArrayList<MemberResultModel>("new_members")
+                Log.d("Add members", "$selectedResults")
+                selectedResults?.let { selectedItems ->
+                    // add members
+                    val eventRef = db.collection("events").document(event.id!!)
+                    val userRefs = selectedItems.map { db.collection("users").document(it.id)}
+                    eventRef.update("members", FieldValue.arrayUnion(*userRefs.toTypedArray()))
+                }
+            }
         }
     }
 
