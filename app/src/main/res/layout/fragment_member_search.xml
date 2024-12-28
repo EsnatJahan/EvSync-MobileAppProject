@@ -10,7 +10,7 @@
     <SearchView
         android:id="@+id/sv_members_serachtext"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:layout_marginVertical="16dp"
         android:layout_marginHorizontal="12dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,6 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/rv_member_search_list"
         android:queryHint="Search..."
+        android:focusable="true"
+        android:clickable="true"
+        android:iconifiedByDefault="false"
         />
 
     <androidx.recyclerview.widget.RecyclerView

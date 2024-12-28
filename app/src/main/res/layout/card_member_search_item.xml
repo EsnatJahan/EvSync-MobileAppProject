@@ -3,28 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:layout_margin="8dp"
-    android:elevation="4dp"
-    android:radius="12dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_height="match_parent"
+        android:padding="8dp"
         tools:context=".SearchFragment">
 
         <!-- Profile Image -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="16dp"
-            android:scaleType="centerCrop"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="4dp"
+            android:paddingHorizontal="4dp"
+            android:paddingVertical="2dp"
+            android:scaleType="fitCenter"
             android:src="@drawable/baseline_account_circle_black_24dp"
-            android:contentDescription="Profile Image"
+            app:shapeAppearanceOverlay="@style/CircularShape"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Name and Email Texts -->
         <LinearLayout

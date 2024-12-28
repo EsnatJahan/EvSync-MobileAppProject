@@ -113,7 +113,9 @@ class MemberSearchFragment : Fragment() {
 
     private fun filterResults(query: String) {
         // Filter the search results based on the query
-        val filteredList = getSearchResults().filter { it.name.contains(query, true) }
+        val filteredList = getSearchResults().filter {
+            it.name.contains(query, true)|| it.email.contains(query, true)
+        }
         searchAdapter.submitList(filteredList)
     }
 
@@ -128,7 +130,7 @@ class MemberSearchFragment : Fragment() {
     private fun sendResultsBack(results: List<MemberResultModel>) {
         // Send the marked results back to the previous fragment
         val bundle = Bundle()
-        bundle.putParcelableArrayList("new_members",ArrayList(results))
+        bundle.putParcelableArrayList("new_members", ArrayList(results))
 
         Log.d("new member", "packaged: ${ArrayList(results)}")
         parentFragmentManager.setFragmentResult("request_add_member", bundle)
