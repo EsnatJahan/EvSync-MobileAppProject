@@ -1,29 +1,34 @@
 package com.esa.evsync.app.pages.EventDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
+import com.esa.evsync.app.pages.EventList.EventDetailsMembersRCAdapter
 import com.esa.evsync.app.pages.EventList.EventListFragment
 import com.esa.evsync.app.pages.EventList.EventDetailsTasksRCAdapter
 import com.esa.evsync.databinding.FragmentEventDetailsTasksBinding
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class EventDetailsTasksFragment(
     private var event: EventModel
 ) : Fragment() {
     private var columnCount = 1
-    private val db = Firebase.firestore
     private lateinit var binding: FragmentEventDetailsTasksBinding
 
 
@@ -53,16 +58,34 @@ class EventDetailsTasksFragment(
 
         var recycleView = binding.rcEventTasks
         // Set the adapter
-        if (recycleView is RecyclerView) {
-            with(recycleView) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = EventDetailsTasksRCAdapter(event.tasks ?: ArrayList<TaskModel>(), binding.root)
 
+        with(recycleView) {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
+            }
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val tasks = ArrayList<TaskModel>()
+                    for (taskRef in event.tasks!!) {
+                        val taskData = taskRef.get().await()
+                        val task = taskData.toObject(TaskModel::class.java)
+                        if (task != null) {
+                            task.id = taskData.id
+                            tasks.add(task)
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        adapter = EventDetailsTasksRCAdapter(tasks, binding.root)
+                    }
+                } catch (e: Error) {
+                    Log.e("Firebase", "Failed to fetch task info", e)
+                    Toast.makeText(requireContext(), "Failed to load tasks", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
         return binding.root
     }
 

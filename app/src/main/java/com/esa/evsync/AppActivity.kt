@@ -2,27 +2,22 @@ package com.esa.evsync
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.esa.evsync.app.models.AppViewModel
 import com.esa.evsync.databinding.ActivityAppBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
 class AppActivity : AppCompatActivity() {
-    private val model: AppViewModel by viewModels()
-    lateinit private var binding: ActivityAppBinding
-    lateinit private var navController: NavController
+    private lateinit var binding: ActivityAppBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -42,14 +37,13 @@ class AppActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Initialize NavHostFragment and NavController
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.appBody) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.appBody) as NavHostFragment
         navController = navHostFragment.navController
 
         // Set up Bottom Navigation
         binding.bottomNav.setupWithNavController(navController)
 
-//         Handle the Bottom Navigation item clicks
+//      Handle the Bottom Navigation item clicks
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_events -> {
@@ -68,8 +62,7 @@ class AppActivity : AppCompatActivity() {
             }
         }
 
-//        // setup navigation actionbar
-//        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        // setup navigation actionbar
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_tasks,
             R.id.nav_events,

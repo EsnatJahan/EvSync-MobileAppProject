@@ -5,18 +5,19 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.utils.documentReference
 import com.esa.evsync.databinding.FragmentEventListBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +32,7 @@ class EventListFragment : Fragment() {
     private var columnCount = 1
     private val db = Firebase.firestore
     private lateinit var binding: FragmentEventListBinding
-    private lateinit var user: DocumentReference
+    private lateinit var currentUser: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,7 @@ class EventListFragment : Fragment() {
     ): View {
         binding = FragmentEventListBinding.inflate(layoutInflater)
 
-        user = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
         binding.btnAddEvent.setOnClickListener {
             val navController = findNavController()
@@ -70,7 +71,7 @@ class EventListFragment : Fragment() {
                     val events = db.collection("events")
                         .whereArrayContains(
                             "members",
-                            user
+                            currentUser.documentReference
                         )
                         .get()
                         .await()
@@ -87,6 +88,7 @@ class EventListFragment : Fragment() {
                     }
                 }catch (e: Error) {
                     Log.e("Firebase", "failed to load event list", e)
+                    Toast.makeText(requireContext(), "Failed to load events", Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -12,10 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
+import com.esa.evsync.app.utils.documentReference
 import com.esa.evsync.databinding.FragmentEventAddBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ import kotlinx.coroutines.withContext
 class EventAddFragment : Fragment() {
     private lateinit var binding: FragmentEventAddBinding
     private val db = Firebase.firestore
-    private lateinit var user: DocumentReference
+    private lateinit var currentUser: FirebaseUser
 
 
     override fun onCreateView(
@@ -39,21 +40,17 @@ class EventAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.ivPic.setOnClickListener(::addImage)
         binding.btnCreate.setOnClickListener(::addEvent)
-        user = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        currentUser = FirebaseAuth.getInstance().currentUser!!
     }
 
-//    private fun addImage(view: View?) {
-//
-//    }
     private fun addEvent(view: View?) {
-        var event = EventModel(
+        val event = EventModel(
             name = binding.etName.text.toString(),
             description = binding.etDesc.text.toString(),
             image = null,
-            owner = user,
-            members = ArrayList(listOf(user)),
+            owner = currentUser.documentReference,
+            members = ArrayList(listOf(currentUser.documentReference)),
             tasks = ArrayList()
         )
         
@@ -73,7 +70,7 @@ class EventAddFragment : Fragment() {
                 navController.navigate(R.id.action_nav_eventAddFragment_to_nav_events)
             } catch (e: Error) {
                 Log.e("Firebase", "Failed to create event", e)
-                Toast.makeText(requireContext(), "Error occurred failed to register event", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Failed to create event", Toast.LENGTH_SHORT).show()
             }
         }
 

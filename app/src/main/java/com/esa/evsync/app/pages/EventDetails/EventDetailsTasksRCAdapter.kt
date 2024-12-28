@@ -4,21 +4,16 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.findNavController
-import com.bumptech.glide.Glide
-import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.TaskModel
 
-import com.esa.evsync.databinding.FragmentEventCardBinding
 import com.esa.evsync.databinding.FragmentTaskCardBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [TaskModel]..
  */
 class EventDetailsTasksRCAdapter(
-    var values: List<TaskModel>,
+    var tasks: List<TaskModel>,
     private val itemView: View // fragments context
 ) : RecyclerView.Adapter<EventDetailsTasksRCAdapter.ViewHolder>() {
 
@@ -34,9 +29,9 @@ class EventDetailsTasksRCAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idName.text = item.name?:"Unknown group"
-        holder.idDesc.text = item.description?:"Unknown description"
+        val task = tasks[position]
+        holder.idName.text = task.name?:"Unknown group"
+        holder.idDesc.text = task.description?:"Unknown description"
         val context = holder.idName.context
 //        if (item.image != null) {
 //            Glide.with(context)
@@ -49,7 +44,7 @@ class EventDetailsTasksRCAdapter(
 //        }
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = tasks.size
 
     inner class ViewHolder(binding: FragmentTaskCardBinding) :
         RecyclerView.ViewHolder(binding.root) {

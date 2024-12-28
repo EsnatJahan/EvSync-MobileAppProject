@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,18 +63,23 @@ class EventDetailsMembersFragment(
             }
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val members = ArrayList<UserModel>()
-                for (memberRef in event.members!!) {
-                    val memberData = memberRef.get().await()
-                    val member = memberData.toObject(UserModel::class.java)
-                    if (member != null) {
-                        member.id = memberData.id
-                        members.add(member)
-                    }
+                try {
+                    val members = ArrayList<UserModel>()
+                    for (memberRef in event.members!!) {
+                        val memberData = memberRef.get().await()
+                        val member = memberData.toObject(UserModel::class.java)
+                        if (member != null) {
+                            member.id = memberData.id
+                            members.add(member)
+                        }
 
-                }
-                withContext(Dispatchers.Main) {
-                    adapter = EventDetailsMembersRCAdapter(members, event, binding.root)
+                    }
+                    withContext(Dispatchers.Main) {
+                        adapter = EventDetailsMembersRCAdapter(members, event, binding.root)
+                    }
+                } catch (e: Error) {
+                    Log.e("Firebase", "Failed to fetch member info", e)
+                    Toast.makeText(requireContext(), "Failed to load members", Toast.LENGTH_SHORT).show()
                 }
             }
 

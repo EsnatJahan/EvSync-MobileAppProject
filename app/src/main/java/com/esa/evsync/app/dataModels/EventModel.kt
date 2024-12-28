@@ -10,5 +10,5 @@ data class EventModel(
     var members: ArrayList<DocumentReference>? = null,
     var description: String? = null,
     var image: Uri? = null,
-    var tasks: ArrayList<TaskModel>? = null,
+    var tasks: ArrayList<DocumentReference>? = null,
 )
