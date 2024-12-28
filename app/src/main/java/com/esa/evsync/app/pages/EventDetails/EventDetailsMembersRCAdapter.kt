@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
  * [RecyclerView.Adapter] that can display a [UserModel]..
  */
 class EventDetailsMembersRCAdapter(
-    private val members: ArrayList<UserModel>,
+    private var members: ArrayList<UserModel>,
     private val event: EventModel,
     private val itemView: View // fragments context
 ) : RecyclerView.Adapter<EventDetailsMembersRCAdapter.ViewHolder>() {
@@ -102,6 +102,10 @@ class EventDetailsMembersRCAdapter(
 
     override fun getItemCount(): Int = members.size
 
+    fun setData(newMembers: ArrayList<UserModel>) {
+        members = newMembers
+        notifyDataSetChanged()  // Notify that the dataset has changed
+    }
     inner class ViewHolder(binding: FragmentMemberCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName

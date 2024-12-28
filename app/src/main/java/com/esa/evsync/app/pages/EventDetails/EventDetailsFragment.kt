@@ -52,36 +52,23 @@ class EventDetailsFragment : Fragment() {
         binding.tvName.text = args.eventName
         binding.tvDescriptiopn.text = args.eventDescription
 
-        parentFragmentManager.setFragmentResultListener("request_add_member", viewLifecycleOwner) { requestKey, bundle ->
-            if (requestKey == "request_add_member") {
-                val selectedResults = bundle.getParcelableArrayList<MemberResultModel>("new_members")
-                Log.d("Add members", "$selectedResults")
-                selectedResults?.let { selectedItems ->
-                    // add members
-                    val eventRef = db.collection("events").document(event.id!!)
-                    val userRefs = selectedItems.map { db.collection("users").document(it.id)}
-                    eventRef.update("members", FieldValue.arrayUnion(userRefs))
-                }
+        viewPager2.adapter = EventDetailsPagerAdapter(fragment)
+        // Connect TabLayout and ViewPager2
+        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            tab.text = when (position) {
+                0 -> "Tasks"
+                else -> "Members"
             }
-        }
-        showLoading(true)
+        }.attach()
+
         lifecycleScope.launch {
             val ref = withContext(Dispatchers.IO) {
                 db.collection("events").document(id).get().await()
             }
             event = ref.toObject(EventModel::class.java)!!
             event.id = ref.id
-
             // Set the adapter for ViewPager2
-            viewPager2.adapter = EventDetailsPagerAdapter(fragment, event)
-            // Connect TabLayout and ViewPager2
-            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-                tab.text = when (position) {
-                    0 -> "Tasks"
-                    else -> "Members"
-                }
-            }.attach()
-            showLoading(false)
+            (viewPager2.adapter as EventDetailsPagerAdapter).updateEvent(event)
         }
 
         parentFragmentManager.setFragmentResultListener("request_add_member", viewLifecycleOwner) { requestKey, bundle ->
@@ -92,20 +79,31 @@ class EventDetailsFragment : Fragment() {
                     // add members
                     val eventRef = db.collection("events").document(event.id!!)
                     val userRefs = selectedItems.map { db.collection("users").document(it.id)}
-                    eventRef.update("members", FieldValue.arrayUnion(*userRefs.toTypedArray()))
+                    lifecycleScope.launch {
+                        try {
+                            val updatedEventSS = withContext(Dispatchers.IO){
+                                eventRef.update( "members", FieldValue.arrayUnion(*userRefs.toTypedArray()) ).await()
+                                db.collection("events").document(id).get().await()
+                            }
+
+                            val updatedEvent = updatedEventSS.toObject(EventModel::class.java)!!
+                            updatedEvent.id = updatedEventSS.id
+                            event = updatedEvent
+                            Log.d("Firebase", "event refetch: ${updatedEvent}")
+                            val curItem = viewPager2.currentItem
+                            viewPager2.adapter = null
+                            viewPager2.adapter = EventDetailsPagerAdapter(fragment)
+                            viewPager2.setCurrentItem(curItem, false)
+                            (viewPager2.adapter as EventDetailsPagerAdapter).updateEvent(updatedEvent)
+                        } catch (e: Error) {
+                            Log.e("Firebase", "failed to fetch updated info", e)
+                        }
+                    }
+
                 }
             }
         }
     }
 
 
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.pbTlDetails.visibility = View.VISIBLE
-            binding.vpEventDetails.visibility = View.GONE
-        } else {
-            binding.pbTlDetails.visibility = View.GONE
-            binding.vpEventDetails.visibility = View.VISIBLE
-        }
-    }
 }

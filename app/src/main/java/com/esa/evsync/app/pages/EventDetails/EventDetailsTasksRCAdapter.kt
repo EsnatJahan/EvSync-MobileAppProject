@@ -46,6 +46,11 @@ class EventDetailsTasksRCAdapter(
 
     override fun getItemCount(): Int = tasks.size
 
+    fun setData(newTasks: ArrayList<TaskModel>) {
+        tasks = newTasks
+        notifyDataSetChanged()  // Notify that the dataset has changed
+    }
+
     inner class ViewHolder(binding: FragmentTaskCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
