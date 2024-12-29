@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
+//import com.esa.evsync.databinding.FragmentEventCardBinding
 import com.esa.evsync.databinding.FragmentTaskListBinding
 import com.esa.evsync.databinding.TaskitemBinding
 import java.text.SimpleDateFormat
