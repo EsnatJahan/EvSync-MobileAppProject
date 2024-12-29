@@ -8,17 +8,15 @@
     tools:context=".app.pages.TaskListFragment"
     >
 
-
-
     <ImageView
         android:id="@+id/taskimg"
-        android:layout_width="413dp"
-        android:layout_height="222dp"
+        android:layout_width="426dp"
+        android:layout_height="217dp"
         android:src="@drawable/knot"
         android:tooltipText=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
@@ -28,13 +26,13 @@
 
     <TextView
 
-        android:layout_width="169dp"
-        android:layout_height="69dp"
+        android:layout_width="201dp"
+        android:layout_height="75dp"
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Upcoming Events On"
+        android:text="Keep track of your events wih"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,15 +41,15 @@
 
     <TextView
         android:id="@+id/idDateTextView"
-        android:layout_width="205dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="112dp"
-        android:text="15thDecember"
-        android:textColor="@color/black"
+        android:layout_width="161dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="100dp"
+        android:text="EvSync"
+        android:textColor="@color/teal_700"
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintHorizontal_bias="0.2"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
