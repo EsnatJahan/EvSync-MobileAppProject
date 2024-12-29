@@ -74,6 +74,12 @@ class EventDetailsFragment : Fragment() {
                 viewModel.addMembers(selectedResults)
             }
         }
+        parentFragmentManager.setFragmentResultListener("request_task_add", viewLifecycleOwner) { requestKey, bundle ->
+            if (requestKey == "request_task_add") {
+                val taskInfo = bundle.getParcelable<TaskAddDataModel>("task_info")
+                viewModel.addTask(taskInfo)
+            }
+        }
     }
 
 }

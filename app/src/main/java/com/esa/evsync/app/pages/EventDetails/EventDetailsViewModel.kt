@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
+import com.esa.evsync.app.dataModels.TaskPriority
 import com.esa.evsync.app.dataModels.UserModel
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -18,6 +19,9 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class EventDetailsViewModel(val eventId: String): ViewModel() {
     private var db = Firebase.firestore
@@ -43,7 +47,6 @@ class EventDetailsViewModel(val eventId: String): ViewModel() {
     fun fetchEventInfo(onComplete: ()->Unit = {
         fetchTasks()
         fetchMembers()
-
     }) {
         viewModelScope.launch(Dispatchers.Main) {
             val ref = withContext(Dispatchers.IO) {
@@ -138,6 +141,46 @@ class EventDetailsViewModel(val eventId: String): ViewModel() {
             }
 
         }
+    }
+
+    private fun convertToDate(dateString: String): Date? {
+        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return try {
+            format.parse(dateString)
+        } catch (e: Exception) {
+            e.printStackTrace()  // Handle exception if the string format is invalid
+            null
+        }
+    }
+
+    fun addTask(taskInfo: TaskAddDataModel?) {
+        if (taskInfo == null) return
+
+        val eventRef = db.collection("events").document(eventId)
+        val task = TaskModel(
+            name = taskInfo.name,
+            description = taskInfo.description,
+            priority = TaskPriority.valueOf(taskInfo.priority.uppercase()),
+            deadline = convertToDate(taskInfo.deadline),
+            eventRef = eventRef,
+            assigned = ArrayList(taskInfo.assigned.map {db.collection("users").document(it)}),
+            complete = false
+        )
+
+        viewModelScope.launch(Dispatchers.Main) {
+            try {
+                withContext(Dispatchers.IO) {
+                    val taskRef = db.collection("tasks").add(task).await()!!
+                    eventRef.update("tasks", FieldValue.arrayUnion(taskRef)).await()
+                }
+                showToast("Task created")
+            } catch (e: Error) {
+                Log.e("Firebase", "Failed to create event", e)
+                showToast("Failed to register event")
+            }
+            fetchEventInfo(::fetchTasks)
+        }
+
     }
 
     companion object {
