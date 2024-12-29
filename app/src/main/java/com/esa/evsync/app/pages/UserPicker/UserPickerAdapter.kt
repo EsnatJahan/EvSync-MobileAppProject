@@ -1,4 +1,4 @@
-package com.esa.evsync.app.pages.MemberSearch
+package com.esa.evsync.app.pages.UserPicker
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.databinding.CardMemberSearchItemBinding
 
-class MemberSearchAdapter(private val onItemSelected: (MemberResultModel, Boolean) -> Unit) :
-    ListAdapter<MemberResultModel, MemberSearchAdapter.SearchViewHolder>(ResultDiffCallback()) {
+class MemberSearchAdapter(private val onItemSelected: (UserPickerDataModel, Boolean) -> Unit) :
+    ListAdapter<UserPickerDataModel, MemberSearchAdapter.SearchViewHolder>(ResultDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = CardMemberSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,7 +25,7 @@ class MemberSearchAdapter(private val onItemSelected: (MemberResultModel, Boolea
     inner class SearchViewHolder(private val binding: CardMemberSearchItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: MemberResultModel) {
+        fun bind(item: UserPickerDataModel) {
             binding.name.text = item.name
             binding.email.text = item.email
 
@@ -47,12 +47,12 @@ class MemberSearchAdapter(private val onItemSelected: (MemberResultModel, Boolea
 }
 
 
-class ResultDiffCallback : DiffUtil.ItemCallback<MemberResultModel>() {
-    override fun areItemsTheSame(oldItem: MemberResultModel, newItem: MemberResultModel): Boolean {
+class ResultDiffCallback : DiffUtil.ItemCallback<UserPickerDataModel>() {
+    override fun areItemsTheSame(oldItem: UserPickerDataModel, newItem: UserPickerDataModel): Boolean {
         return oldItem.name == newItem.name // Assuming name is unique, adjust if needed
     }
 
-    override fun areContentsTheSame(oldItem: MemberResultModel, newItem: MemberResultModel): Boolean {
+    override fun areContentsTheSame(oldItem: UserPickerDataModel, newItem: UserPickerDataModel): Boolean {
         return oldItem == newItem
     }
 }

@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.esa.evsync.app.pages.EventList.EventDetailsMembersRCAdapter
 import com.esa.evsync.app.pages.EventList.EventListFragment
 import com.esa.evsync.databinding.FragmentEventDetailsMembersBinding
+import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class EventDetailsMembersFragment(
     private val viewModel: EventDetailsViewModel) : Fragment() {
@@ -36,11 +39,18 @@ class EventDetailsMembersFragment(
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddMember.setOnClickListener {
-            val navController = findNavController()
-            val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavMemberAdd(
-                eventId = viewModel.eventId
-            )
-            navController.navigate(action)
+            if (viewModel.event.value == null || viewModel.event.value!!.members == null) return@setOnClickListener
+            Firebase.firestore.collection("users")
+                .whereNotIn(FieldPath.documentId(), viewModel.event.value!!.members!!)
+                .get()
+                .addOnSuccessListener { users ->
+                    val navController = findNavController()
+                    val userIDs = users.documents.map {it.id}
+                    val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavMemberAdd(
+                        userIDs = userIDs.toTypedArray()
+                    )
+                    navController.navigate(action)
+                }
         }
 
         binding.rcEventMembers.layoutManager = when {

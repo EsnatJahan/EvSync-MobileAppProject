@@ -68,8 +68,8 @@ class EventDetailsFragment : Fragment() {
 
         viewModel.fetchEventInfo()
 
-        parentFragmentManager.setFragmentResultListener("request_search_member", viewLifecycleOwner) { requestKey, bundle ->
-            if (requestKey == "request_search_member") {
+        parentFragmentManager.setFragmentResultListener("request_user_picker", viewLifecycleOwner) { requestKey, bundle ->
+            if (requestKey == "request_user_picker") {
                 val selectedResults = bundle.getStringArrayList("selected_result")
                 viewModel.addMembers(selectedResults)
             }
