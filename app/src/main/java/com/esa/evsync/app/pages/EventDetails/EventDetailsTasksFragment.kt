@@ -52,9 +52,7 @@ class EventDetailsTasksFragment(
         binding.btnAddTask.setOnClickListener {
             val navController = findNavController()
             val action = EventDetailsFragmentDirections.actionNavEventDetailsToNavTaskAdd(
-                eventId = event?.id ?: "",
-                eventName = event?.name ?: "",
-                eventDescription = event?.description ?: ""
+                eventId = viewModel.event.value!!.id ?: "",
             )
             navController.navigate(action)
         }

@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.esa.evsync.R
+import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
 import com.esa.evsync.app.dataModels.TaskPriority
 import com.esa.evsync.app.pages.EventDetails.TaskAddDataModel
@@ -36,7 +37,7 @@ class TaskAddFragment : Fragment() {
     private lateinit var binding: FragmentTaskAddBinding
     private val db = Firebase.firestore
     private lateinit var eventId: String
-    private val taskCollection = db.collection("tasks")
+    private var assigned = ArrayList<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +77,37 @@ class TaskAddFragment : Fragment() {
             datePickerDialog.show()
         }
         binding.btnCreate.setOnClickListener{ addTask() }
+
+        binding.btnAssign.setOnClickListener {
+            try {
+                db.collection("events").document(args.eventId)
+                    .get()
+                    .addOnSuccessListener { eventSnapshot ->
+                        val navController = findNavController()
+                        val event = eventSnapshot.toObject(EventModel::class.java)!!
+                        val userIDs = event.members!!.map {it.id}
+                        val action = TaskAddFragmentDirections.actionNavTaskAddToNavUserPicker(
+                            userIDs = userIDs.toTypedArray()
+                        )
+                        navController.navigate(action)
+                    }
+            } catch (e: Error) {
+                Log.e("datafetch", "Failed to get users data", e)
+                Toast.makeText(requireContext(), "Failed to get user info", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+
+        parentFragmentManager.setFragmentResultListener("request_user_picker", viewLifecycleOwner) { requestKey, bundle ->
+            if (requestKey == "request_user_picker") {
+                val updatedAssigned = bundle.getStringArrayList("selected_result")
+                if (updatedAssigned != null) {
+                    assigned = updatedAssigned
+                    binding.tvAssignCnt.text = " (${assigned.size})"
+                }
+            }
+        }
     }
 
     private fun addTask() {
@@ -84,7 +116,7 @@ class TaskAddFragment : Fragment() {
             description = binding.etDesc.text.toString(),
             priority = binding.dropdownPriority.selectedItem as String,
             deadline = binding.tvDate.text.toString(),
-            assigned = ArrayList(),
+            assigned = assigned,
         )
 
         if (task.name == "" || task.description == "" || task.deadline == ""

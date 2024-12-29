@@ -105,15 +105,12 @@
         <argument
             android:name="eventId"
             app:argType="string" />
-        <argument
-            android:name="eventName"
-            app:argType="string"/>
-        <argument
-            android:name="eventDescription"
-            app:argType="string" />
         <action
             android:id="@+id/action_nav_task_add_to_nav_event_details"
             app:destination="@id/nav_event_details" />
+        <action
+            android:id="@+id/action_nav_task_add_to_nav_user_picker"
+            app:destination="@id/nav_user_picker" />
     </fragment>
 
     <fragment
@@ -124,5 +121,10 @@
         <argument
             android:name="userIDs"
             app:argType="string[]" />
+        <argument
+            android:name="selected"
+            app:argType="string[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>
