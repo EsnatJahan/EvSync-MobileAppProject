@@ -47,6 +47,11 @@ class EventListRecyclerViewAdapter(
 
     override fun getItemCount(): Int = events.size
 
+    fun setData(newEvents: ArrayList<EventModel>) {
+        events = newEvents
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(binding: CardEventListitemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName

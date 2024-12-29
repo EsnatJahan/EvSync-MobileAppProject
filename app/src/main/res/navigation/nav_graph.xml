@@ -65,7 +65,7 @@
 
     <fragment
         android:id="@+id/nav_eventAddFragment"
-        android:name="com.esa.evsync.app.pages.EventAddFragment"
+        android:name="com.esa.evsync.app.pages.EventList.EventAddFragment"
         android:label="Add Event"
         tools:layout="@layout/fragment_event_add"
         >
