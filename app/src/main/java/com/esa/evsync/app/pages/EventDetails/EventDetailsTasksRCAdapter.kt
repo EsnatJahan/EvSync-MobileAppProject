@@ -32,16 +32,6 @@ class EventDetailsTasksRCAdapter(
         val task = tasks[position]
         holder.idName.text = task.name?:"Unknown group"
         holder.idDesc.text = task.description?:"Unknown description"
-        val context = holder.idName.context
-//        if (item.image != null) {
-//            Glide.with(context)
-//                .load(item.image)
-//                .placeholder(R.drawable.baseline_cached_black_24dp)
-//                .error(R.drawable.baseline_sync_problem_black_24dp)
-//                .into(holder.idImage)
-//        } else {
-//            holder.idImage.setImageResource(R.drawable.baseline_event_black_24dp)
-//        }
     }
 
     override fun getItemCount(): Int = tasks.size

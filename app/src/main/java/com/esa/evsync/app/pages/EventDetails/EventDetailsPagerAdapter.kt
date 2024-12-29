@@ -5,21 +5,16 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.esa.evsync.app.dataModels.EventModel
 
-class EventDetailsPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class EventDetailsPagerAdapter(
+    fragment: Fragment,
+    viewModel: EventDetailsViewModel) : FragmentStateAdapter(fragment) {
+
     private val fragments: List<Fragment> = listOf(
-        EventDetailsTasksFragment(),
-        EventDetailsMembersFragment()
+        EventDetailsTasksFragment(viewModel),
+        EventDetailsMembersFragment(viewModel)
     )
 
     override fun getItemCount(): Int = fragments.size
     override fun createFragment(position: Int): Fragment = fragments[position]
 
-    fun updateEvent(event: EventModel) {
-        Log.d("datafetch", "PagerAdapter: update called with event $event")
-        fragments.forEach {
-            if (it is EventDetailsUpdatable) { // Interface for fragments that can be updated
-                it.updateEvent(event)
-            }
-        }
-    }
 }

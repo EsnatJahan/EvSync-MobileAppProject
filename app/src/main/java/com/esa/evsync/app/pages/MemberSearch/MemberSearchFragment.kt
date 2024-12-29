@@ -130,10 +130,8 @@ class MemberSearchFragment : Fragment() {
     private fun sendResultsBack(results: List<MemberResultModel>) {
         // Send the marked results back to the previous fragment
         val bundle = Bundle()
-        bundle.putParcelableArrayList("new_members", ArrayList(results))
-
-        Log.d("new member", "packaged: ${ArrayList(results)}")
-        parentFragmentManager.setFragmentResult("request_add_member", bundle)
+        bundle.putStringArrayList("selected_result", ArrayList(results.map { it.id }))
+        parentFragmentManager.setFragmentResult("request_search_member", bundle)
         findNavController().popBackStack()
     }
 

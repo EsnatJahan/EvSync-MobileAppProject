@@ -24,20 +24,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class EventDetailsTasksFragment() : Fragment(),  EventDetailsUpdatable {
+class EventDetailsTasksFragment(
+    private val viewModel: EventDetailsViewModel) : Fragment() {
     private var columnCount = 1
     private lateinit var binding: FragmentEventDetailsTasksBinding
-//    private var pendingUpdate = false
     private var event: EventModel? = null
-    private var tasks = ArrayList<TaskModel>()
-    private var mycount = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mycount = ++count
-        Log.d("datafetch", "Created TaskFragment: $mycount")
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -48,7 +44,6 @@ class EventDetailsTasksFragment() : Fragment(),  EventDetailsUpdatable {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEventDetailsTasksBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
@@ -69,60 +64,15 @@ class EventDetailsTasksFragment() : Fragment(),  EventDetailsUpdatable {
             else -> GridLayoutManager(context, columnCount)
         }
 
-        displayTasks()
-    }
+        if (binding.rcEventTasks.adapter == null)
+            binding.rcEventTasks.adapter = EventDetailsTasksRCAdapter(ArrayList(), binding.root)
+        if (viewModel.tasks.value == null) showLoading(true)
+        else (binding.rcEventTasks.adapter as EventDetailsTasksRCAdapter).setData(viewModel.tasks.value!!)
 
-//    override fun onResume() {
-//        super.onResume()
-//        if (pendingUpdate) updateEvent(event!!)
-//    }
-
-    override fun updateEvent(event: EventModel) {
-        Log.d("datafetch", "TaskFragment: update called with event $event")
-        Log.d("datafetch", "TaskFragment: count: $count, mycount: $mycount")
-        this.event = event
-        fetchTasks()
-    }
-
-
-
-    private fun fetchTasks() {
-        CoroutineScope(Dispatchers.Main).launch {
-            showLoading(true)
-            try {
-                Log.d("datafetch", "Fetching task data")
-                Log.d("datafetch", "TaskFragment: count: $count, mycount: $mycount")
-                tasks = arrayListOf(*(event?.tasks!!.map {taskRef ->
-                    async(Dispatchers.IO) {taskRef.get().await()}
-                }
-                    .awaitAll()
-                    .map {
-                    val task = it.toObject(TaskModel::class.java)!!
-                    task.id = it.id
-                    task
-                }).toTypedArray())
-                displayTasks()
-                Log.d("datafetch", "TaskFragment: count: $count, mycount: $mycount")
-            } catch (e: Error) {
-                Log.e("Firebase", "Failed to fetch task info", e)
-                Toast.makeText(requireContext(), "Failed to load tasks", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
-
-    private fun displayTasks() {
-        if (view == null) return
-        if (event == null) {
-            showLoading(true)
-            return
-        }
-        if (binding.rcEventTasks.adapter == null) {
-            binding.rcEventTasks.adapter = EventDetailsTasksRCAdapter(tasks, binding.root)
-        } else {
+        viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             (binding.rcEventTasks.adapter as EventDetailsTasksRCAdapter).setData(tasks)
+            showLoading(false)
         }
-        showLoading(false)
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -140,8 +90,6 @@ class EventDetailsTasksFragment() : Fragment(),  EventDetailsUpdatable {
 
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "1"
-        var count = 0
-
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
