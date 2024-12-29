@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
-
 import com.esa.evsync.app.pages.EventList.EventListFragment.Companion.ARG_COLUMN_COUNT
 import com.esa.evsync.app.utils.documentReference
 import com.esa.evsync.databinding.FragmentEventListBinding
@@ -69,7 +68,7 @@ class TaskListFragment : Fragment() {
                     Log.d("Firebase", "data request sents")
                     val events = db.collection("tasks")
                         .whereArrayContains(
-                            "members",
+                            "assigned",
                             currentUser.documentReference
                         )
                         .get()
@@ -80,7 +79,7 @@ class TaskListFragment : Fragment() {
                     for (task in events.documents) {
                         var taskData = task.toObject(TaskModel::class.java)!!
                         taskData.id = task.id
-                        Toast.makeText(requireContext(), "Value: ${task.id}", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "Value: ${task.id}", Toast.LENGTH_SHORT).show()
 
                         taskList.add(taskData)
                     }
