@@ -2,7 +2,6 @@ package com.esa.evsync.app.pages.EventList
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -12,20 +11,19 @@ import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.UserModel
 import com.esa.evsync.app.pages.EventDetails.EventDetailsViewModel
 
-import com.esa.evsync.databinding.FragmentMemberCardBinding
+import com.esa.evsync.databinding.CardMemberListitemBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [UserModel]..
  */
 class EventDetailsMembersRCAdapter(
     private var members: ArrayList<UserModel>,
-    private val itemView: View, // fragments context
     private val viewMdoel: EventDetailsViewModel
 ) : RecyclerView.Adapter<EventDetailsMembersRCAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            FragmentMemberCardBinding.inflate(
+            CardMemberListitemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -66,7 +64,7 @@ class EventDetailsMembersRCAdapter(
         members = newMembers
         notifyDataSetChanged()  // Notify that the dataset has changed
     }
-    inner class ViewHolder(binding: FragmentMemberCardBinding) :
+    inner class ViewHolder(binding: CardMemberListitemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
         val idDesc: TextView = binding.tvDescription

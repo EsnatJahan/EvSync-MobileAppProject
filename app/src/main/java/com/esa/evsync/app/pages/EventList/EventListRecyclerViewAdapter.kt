@@ -2,7 +2,6 @@ package com.esa.evsync.app.pages.EventList
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,19 +9,18 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
-import com.esa.evsync.databinding.FragmentEventCardBinding
+import com.esa.evsync.databinding.CardEventListitemBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [EventModel]..
  */
 class EventListRecyclerViewAdapter(
     var events: List<EventModel>,
-    private val itemView: View // fragments context
 ) : RecyclerView.Adapter<EventListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            FragmentEventCardBinding.inflate(
+            CardEventListitemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -49,7 +47,7 @@ class EventListRecyclerViewAdapter(
 
     override fun getItemCount(): Int = events.size
 
-    inner class ViewHolder(binding: FragmentEventCardBinding) :
+    inner class ViewHolder(binding: CardEventListitemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
         val idDesc: TextView = binding.tvDescription

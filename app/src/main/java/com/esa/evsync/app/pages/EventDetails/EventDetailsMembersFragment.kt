@@ -49,7 +49,7 @@ class EventDetailsMembersFragment(
         }
 
         if (binding.rcEventMembers.adapter == null)
-            binding.rcEventMembers.adapter = EventDetailsMembersRCAdapter(ArrayList(), binding.root, viewModel)
+            binding.rcEventMembers.adapter = EventDetailsMembersRCAdapter(ArrayList(),  viewModel)
         if (viewModel.members.value == null) showLoading(true)
         else (binding.rcEventMembers.adapter as EventDetailsMembersRCAdapter).setData(viewModel.members.value!!)
 

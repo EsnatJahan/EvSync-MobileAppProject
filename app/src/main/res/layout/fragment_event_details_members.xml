@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layoutManager="LinearLayoutManager"
         tools:context=".app.pages.EventDetails.EventDetailsMembersFragment"
-        tools:listitem="@layout/fragment_member_card"
+        tools:listitem="@layout/card_member_listitem"
         />
 
     <ImageView

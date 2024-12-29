@@ -77,13 +77,13 @@ class EventListFragment : Fragment() {
                         .await()
                     val eventList = ArrayList<EventModel>()
                     for (event in events.documents) {
-                        var eventData = event.toObject(EventModel::class.java)!!
+                        val eventData = event.toObject(EventModel::class.java)!!
                         eventData.id = event.id
                         eventList.add(eventData)
                     }
 
                     withContext(Dispatchers.Main) {
-                        adapter = EventListRecyclerViewAdapter(eventList, binding.root)
+                        adapter = EventListRecyclerViewAdapter(eventList)
                         showLoading(false)
                     }
                 }catch (e: Error) {

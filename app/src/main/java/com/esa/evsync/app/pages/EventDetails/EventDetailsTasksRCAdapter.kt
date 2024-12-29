@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.esa.evsync.app.dataModels.TaskModel
 
-import com.esa.evsync.databinding.FragmentTaskCardBinding
+import com.esa.evsync.databinding.CardTaskListitemBinding
 
 /**
  * [RecyclerView.Adapter] that can display a [TaskModel]..
@@ -19,7 +19,7 @@ class EventDetailsTasksRCAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            FragmentTaskCardBinding.inflate(
+            CardTaskListitemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -41,7 +41,7 @@ class EventDetailsTasksRCAdapter(
         notifyDataSetChanged()  // Notify that the dataset has changed
     }
 
-    inner class ViewHolder(binding: FragmentTaskCardBinding) :
+    inner class ViewHolder(binding: CardTaskListitemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.tvName
         val idDesc: TextView = binding.tvDescription
