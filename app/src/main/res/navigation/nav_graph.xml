@@ -9,8 +9,29 @@
         android:name="com.esa.evsync.app.pages.TaskListFragment"
         android:label="Tasks"
         tools:layout="@layout/fragment_task_list"
-        />
+        >
+        <action
+            android:id="@+id/action_nav_tasks_to_nav_taskdetails"
+            app:destination="@id/nav_task_details" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/nav_task_details"
+        android:name="com.esa.evsync.app.pages.TaskDetails.TaskDetailsFragment"
+        android:label="TaskDetails"
+        tools:layout="@layout/fragment_task_details">
+
+        <argument
+            android:name="taskId"
+            app:argType="string" />
+        <argument
+            android:name="taskname"
+            app:argType="string"/>
+        <argument
+            android:name="taskdescription"
+            app:argType="string" />
+
+    </fragment>
     <fragment
         android:id="@+id/nav_events"
         android:name="com.esa.evsync.app.pages.EventList.EventListFragment"

@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.esa.evsync.R
 import com.esa.evsync.app.dataModels.EventModel
 import com.esa.evsync.app.dataModels.TaskModel
-//import com.esa.evsync.databinding.FragmentEventCardBinding
+import com.esa.evsync.app.pages.EventList.EventListFragmentDirections
 import com.esa.evsync.databinding.FragmentTaskListBinding
 import com.esa.evsync.databinding.TaskitemBinding
 import java.text.SimpleDateFormat
@@ -40,7 +40,6 @@ class Task_ListAdapter(
                 false
             )
         )
-
     }
 
 
@@ -64,9 +63,25 @@ class Task_ListAdapter(
     inner class ViewHolder(binding: TaskitemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val idName: TextView = binding.rvEvent
-
         val idDesc: TextView = binding.rvDescription
        // val dateTextView: TextView = binding.idDateTextView
+
+
+        init {
+            binding.root.setOnClickListener {
+                if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                    val navController = itemView.findNavController()
+                    val action = TaskListFragmentDirections.actionNavTasksToNavTaskdetails(
+                        taskId = events[bindingAdapterPosition].id ?: "",
+                        taskname = events[bindingAdapterPosition].name ?: "",
+                        taskdescription = events[bindingAdapterPosition].description ?: ""
+                    )
+                    navController.navigate(action)
+                }
+            }
+        }
+
+
 
         override fun toString(): String {
             return super.toString() + " '(${idName.text}: ${idDesc.text})'"
