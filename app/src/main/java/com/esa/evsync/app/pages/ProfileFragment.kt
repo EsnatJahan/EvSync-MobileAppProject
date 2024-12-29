@@ -48,9 +48,13 @@ class ProfileFragment : Fragment() {
 
             // Load profile picture
             val photoUrl = it.photoUrl
-            Glide.with(this)
-                .load(photoUrl)
-                .into(profileImageView)
+            if (photoUrl != null) {
+                Glide.with(this)
+                    .load(photoUrl)
+                    .placeholder(R.drawable.baseline_cached_black_24dp)
+                    .error(R.drawable.baseline_account_circle_black_24dp)
+                    .into(profileImageView)
+            }
         }
 
 
